@@ -5,9 +5,9 @@ from .cfg import Config
 from .other import resize_im
 
 sys.path.append('ctpn')
-from lib.networks.factory import get_network
-from lib.fast_rcnn.config import cfg
-from lib.fast_rcnn.test import test_ctpn
+from ..lib.networks.factory import get_network
+from ..lib.fast_rcnn.config import cfg
+from ..lib.fast_rcnn.test import test_ctpn
 
 
 def load_tf_model():
