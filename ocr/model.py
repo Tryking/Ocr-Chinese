@@ -8,8 +8,8 @@ from keras.layers import Lambda
 from keras.optimizers import SGD
 import numpy as np
 # from PIL import Image
-import keras.backend  as K
-import keys
+import keras.backend as K
+from .keys import  *
 import os
 
 
@@ -65,7 +65,7 @@ def get_model(height, nclass):
     return model, basemodel
 
 
-characters = keys.alphabet[:]
+characters = alphabet[:]
 
 modelPath = os.path.join(os.getcwd(), "ocr/ocr0.2.h5")
 height = 32

@@ -24,7 +24,7 @@ def load_tf_model():
     return sess, saver, net
 
 
-##init model
+# init model
 sess, saver, net = load_tf_model()
 
 
