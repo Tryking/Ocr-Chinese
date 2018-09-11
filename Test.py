@@ -1,11 +1,31 @@
 from glob import glob
+import matplotlib.pyplot as plt
 
-paths = glob('./test/*.*')
+from PIL import Image
 
-print(paths)
 
-print('--------------')
+def conv_image():
+    paths = glob('./test/*.*')
 
-print(paths[1])
+    fig = plt.gcf()
+    fig.set_size_inches(w=(12, 14))
 
-print('test')
+    for i in range(0, len(paths)):
+        ax = plt.subplot(5, 5, 1 + i)
+
+        im = Image.open(paths[i])
+        im_convert = im.convert('L')
+        ax.imshow(im)
+        ax.set_title(label=paths[i], fontsize=10)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax_conv = plt.subplot(5, 5, 1 + i + len(paths))
+        ax_conv.imshow(im_convert)
+        ax_conv.set_title(label=paths[i], fontsize=10)
+        ax_conv.set_xticks([])
+        ax_conv.set_yticks([])
+    plt.show()
+
+
+if __name__ == '__main__':
+    conv_image()

@@ -1,5 +1,5 @@
 # coding:utf-8
-##添加文本方向 检测模型，自动检测文字方向，0、90、180、270
+# 添加文本方向 检测模型，自动检测文字方向，0、90、180、270
 from ctpn.text_detect import text_detect
 from ocr.model import predict as ocr
 from angle.predict import predict as angle_detect  ##文字方向检测
@@ -10,7 +10,7 @@ import cv2
 from PIL import Image
 
 
-def crnnRec(im, text_recs, ocrMode='keras', adjust=False):
+def crnnRec(im, text_recs, ocr_mode='keras', adjust=False):
     """
     crnn模型，ocr识别
     @@model,
@@ -38,22 +38,24 @@ def crnnRec(im, text_recs, ocrMode='keras', adjust=False):
             pt3 = (min(rec[6], xDim - 2), min(yDim - 2, rec[7]))
             pt4 = (rec[4], rec[5])
 
-        degree = degrees(atan2(pt2[1] - pt1[1], pt2[0] - pt1[0]))  ##图像倾斜角度
+        # 图像倾斜角度
+        degree = degrees(atan2(pt2[1] - pt1[1], pt2[0] - pt1[0]))
 
-        partImg = dumpRotateImage(im, degree, pt1, pt2, pt3, pt4)
+        part_img = dump_rotate_image(im, degree, pt1, pt2, pt3, pt4)
 
-        image = Image.fromarray(partImg).convert('L')
-        if ocrMode == 'keras':
+        image = Image.fromarray(part_img).convert('L')
+        if ocr_mode == 'keras':
             sim_pred = ocr(image)
         else:
             sim_pred = crnnOcr(image)
 
-        results[index].append(sim_pred)  ##识别文字
+        # 识别文字
+        results[index].append(sim_pred)
 
     return results
 
 
-def dumpRotateImage(img, degree, pt1, pt2, pt3, pt4):
+def dump_rotate_image(img, degree, pt1, pt2, pt3, pt4):
     height, width = img.shape[:2]
     heightNew = int(width * fabs(sin(radians(degree))) + height * fabs(cos(radians(degree))))
     widthNew = int(height * fabs(sin(radians(degree))) + width * fabs(cos(radians(degree))))
