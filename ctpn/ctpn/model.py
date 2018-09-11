@@ -1,27 +1,26 @@
 import tensorflow as tf
-import sys
-import os
+
 from .cfg import Config
 from .other import resize_im
-
-sys.path.append('ctpn')
 from ..lib.networks.factory import get_network
 from ..lib.fast_rcnn.config import cfg
 from ..lib.fast_rcnn.test import test_ctpn
 
 
 def load_tf_model():
-    cfg.TEST.HAS_RPN = True  # Use RPN for proposals
+    # Use RPN for proposals
+    cfg.TEST.HAS_RPN = True
     # init session
+    # allow_soft_placement：如果你指定的设备不存在，允许TF自动分配设备
     config = tf.ConfigProto(allow_soft_placement=True)
-    sess = tf.Session(config=config)
+    _sess = tf.Session(config=config)
     # load network
-    net = get_network("VGGnet_test")
+    _net = get_network("VGGnet_test")
     # load model
     saver = tf.train.Saver()
     ckpt = tf.train.get_checkpoint_state('ctpn/models/')
-    saver.restore(sess, ckpt.model_checkpoint_path)
-    return sess, saver, net
+    saver.restore(_sess, ckpt.model_checkpoint_path)
+    return _sess, saver, _net
 
 
 # init model

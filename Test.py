@@ -1,5 +1,7 @@
 from glob import glob
 import matplotlib.pyplot as plt
+import numpy as np
+import cv2
 
 from PIL import Image
 
@@ -14,7 +16,8 @@ def conv_image():
         ax = plt.subplot(5, 5, 1 + i)
 
         im = Image.open(paths[i])
-        im_convert = im.convert('L')
+        im_convert = im.convert('RGB')
+        test_im = np.array(im)
         ax.imshow(im)
         ax.set_title(label=paths[i], fontsize=10)
         ax.set_xticks([])
@@ -27,5 +30,12 @@ def conv_image():
     plt.show()
 
 
+paths = glob('./test/*.*')
+im = Image.open(paths[1])
+img = np.array(im.convert('RGB'))
+im_orig = img.astype(np.float32, copy=True)
+print('_______________')
+
 if __name__ == '__main__':
-    conv_image()
+    # conv_image()
+    pass

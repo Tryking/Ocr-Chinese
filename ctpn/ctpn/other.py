@@ -97,11 +97,14 @@ def normalize(data):
 
 
 def resize_im(im, scale, max_scale=None):
+    """
+        图像长宽：短边缩为scale，长边同等比例缩减，长不超过max_scale
+    """
     f = float(scale) / min(im.shape[0], im.shape[1])
-    if max_scale != None and f * max(im.shape[0], im.shape[1]) > max_scale:
+    if max_scale is not None and f * max(im.shape[0], im.shape[1]) > max_scale:
         f = float(max_scale) / max(im.shape[0], im.shape[1])
-    return cv2.resize(im, (0, 0), fx=f, fy=f), f
-    # return cv2.resize(im, (0, 0), fx=1.2, fy=1.2), f
+    # dsize：目标图像大小，当dsize为0时，使用fx，fy来计算
+    return cv2.resize(src=im, dsize=(0, 0), fx=f, fy=f), f
 
 
 class Graph:

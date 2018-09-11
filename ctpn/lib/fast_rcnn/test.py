@@ -5,7 +5,9 @@ from ..utils.blob import im_list_to_blob
 
 
 def _get_image_blob(im):
+    # im.astype：将图像转化为float32类型
     im_orig = im.astype(np.float32, copy=True)
+    # todo：为什么要减去一个均值？
     im_orig -= cfg.PIXEL_MEANS
 
     im_shape = im_orig.shape
@@ -32,7 +34,7 @@ def _get_image_blob(im):
 
 
 def _get_blobs(im, rois):
-    blobs = {'data' : None, 'rois' : None}
+    blobs = {'data': None, 'rois': None}
     blobs['data'], im_scale_factors = _get_image_blob(im)
     return blobs, im_scale_factors
 
@@ -41,18 +43,16 @@ def test_ctpn(sess, net, im, boxes=None):
     blobs, im_scales = _get_blobs(im, boxes)
     if cfg.TEST.HAS_RPN:
         im_blob = blobs['data']
-        blobs['im_info'] = np.array(
-            [[im_blob.shape[1], im_blob.shape[2], im_scales[0]]],
-            dtype=np.float32)
+        blobs['im_info'] = np.array([[im_blob.shape[1], im_blob.shape[2], im_scales[0]]], dtype=np.float32)
     # forward pass
     if cfg.TEST.HAS_RPN:
         feed_dict = {net.data: blobs['data'], net.im_info: blobs['im_info'], net.keep_prob: 1.0}
 
-    rois = sess.run([net.get_output('rois')[0]],feed_dict=feed_dict)
-    rois=rois[0]
+    rois = sess.run([net.get_output('rois')[0]], feed_dict=feed_dict)
+    rois = rois[0]
 
     scores = rois[:, 0]
     if cfg.TEST.HAS_RPN:
         assert len(im_scales) == 1, "Only single-image batch implemented"
         boxes = rois[:, 1:5] / im_scales[0]
-    return scores,boxes
+    return scores, boxes

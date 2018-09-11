@@ -76,10 +76,11 @@ def dump_rotate_image(img, degree, pt1, pt2, pt3, pt4):
 
 def model(img, _model='keras', adjust=False, detect_angle=False):
     """
-    @@param:img,
-    @@param:model,选择的ocr模型，支持keras\pytorch版本
-    @@param:adjust 调整文字识别结果
-    @@param:detectAngle,是否检测文字朝向
+    :param img:
+    :param _model: 选择的ocr模型，支持keras\pytorch版本
+    :param adjust: 调整文字识别结果
+    :param detect_angle: 是否检测文字朝向
+    :return:
     """
     angle = 0
     if detect_angle:
