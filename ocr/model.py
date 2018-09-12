@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-## 修复K.ctc_decode bug 当大量测试时将GPU显存消耗完，导致错误，用decode 替代
+# 修复K.ctc_decode bug 当大量测试时将GPU显存消耗完，导致错误，用decode 替代
 ###
 from keras.layers import Input, Conv2D, MaxPooling2D, ZeroPadding2D
 from keras.layers import Flatten, BatchNormalization, Permute, TimeDistributed, Dense, Bidirectional, GRU
@@ -9,7 +9,7 @@ from keras.optimizers import SGD
 import numpy as np
 # from PIL import Image
 import keras.backend as K
-from .keys import  *
+from .keys import *
 import os
 
 
