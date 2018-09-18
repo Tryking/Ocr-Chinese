@@ -1,0 +1,66 @@
+"""
+
+"""
+from collections import OrderedDict
+
+import torch
+from torch.autograd import Variable
+
+from app.config import GPU, OCR_MODEL
+
+from app.crnn import dataset, keys, util
+from app.crnn.models import crnn
+
+
+def crnn_source():
+    alphabet = keys.alphabet
+    converter = util.strLabelConverter(alphabet)
+    if torch.cuda.is_available() and GPU:
+        model = crnn.CRNN(32, 1, len(alphabet) + 1, 256, 1).cuda()
+    else:
+        model = crnn.CRNN(32, 1, len(alphabet) + 1, 256, 1).cpu()
+
+    state_dict = torch.load(OCR_MODEL, map_location=lambda storage, loc: storage)
+    new_state_dict = OrderedDict()
+    for k, v in state_dict.items():
+        # remove `module.`
+        name = k.replace('module.', '')
+        new_state_dict[name] = v
+
+    # load params
+    model.load_state_dict(new_state_dict)
+    model.eval()
+
+    return model, converter
+
+
+# 加载模型
+model, converter = crnn_source()
+
+
+def crnnOcr(image):
+    """
+    crnn模型，ocr识别
+    :param image:
+    :return:
+    """
+    scale = image.size[1] * 1.0 / 32
+    w = image.size[0] / scale
+    w = int(w)
+    # print "im size:{},{}".format(image.size,w)
+    transformer = dataset.resizeNormalize((w, 32))
+    if torch.cuda.is_available() and GPU:
+        image = transformer(image).cuda()
+    else:
+        image = transformer(image).cpu()
+
+    image = image.view(1, *image.size())
+    image = Variable(image)
+    model.eval()
+    preds = model(image)
+    _, preds = preds.max(2)
+    preds = preds.transpose(1, 0).contiguous().view(-1)
+    preds_size = Variable(torch.IntTensor([preds.size(0)]))
+    sim_pred = converter.decode(preds.data, preds_size.data, raw=False)
+
+    return sim_pred
