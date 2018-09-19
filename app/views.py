@@ -17,5 +17,5 @@ def ocr():
     msgid = get_result_param_value(result=result, param='msgid')
     systemtime = get_result_param_value(result=result, param='systemtime')
     localUrl = get_result_param_value(result=result, param='localUrl')
-    handle_ocr()
+    handle_ocr(image_path=localUrl)
     return 'true'
