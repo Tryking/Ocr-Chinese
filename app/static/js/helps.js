@@ -8,7 +8,9 @@ function postImg() {
         jQuery.ajax({
             type: "post",
             url: 'ocr',
-            data: JSON.stringify({"imgString": imgJson["imgString"]}),
+            data: {
+                "img_string": imgJson["imgString"]
+            },
             success: function (d) {
                 loadingGif('loadingGif');
                 imgJson['num'] = 0;//防止重复提交

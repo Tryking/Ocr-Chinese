@@ -16,12 +16,12 @@ def index():
 @app.route('/ocr', methods=['GET', 'POST'])
 def ocr():
     result = request.form.to_dict()
-    imgString = result['imgString'].encode().split(b';base64,')[-1]
-    imgString = base64.b64decode(imgString)
-    jobid = uuid.uuid1().__str__()
-    path = '/tmp/{}.jpg'.format(jobid)
+    img_string = result['img_string'].encode().split(b';base64,')[-1]
+    img_string = base64.b64decode(img_string)
+    job_id = uuid.uuid1().__str__()
+    path = '/tmp/{}.jpg'.format(job_id)
     with open(path, 'wb') as f:
-        f.write(imgString)
+        f.write(img_string)
     handle_ocr(image_path=path)
     return 'true'
 
