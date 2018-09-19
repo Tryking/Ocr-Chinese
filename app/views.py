@@ -19,7 +19,7 @@ def ocr():
     img_string = result['img_string'].encode().split(b';base64,')[-1]
     img_string = base64.b64decode(img_string)
     job_id = uuid.uuid1().__str__()
-    path = '/tmp/{}.jpg'.format(job_id)
+    path = '/tmp/{}.png'.format(job_id)
     with open(path, 'wb') as f:
         f.write(img_string)
     handle_ocr(image_path=path)
