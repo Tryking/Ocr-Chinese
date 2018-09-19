@@ -25,7 +25,7 @@ def ocr():
     with open(path, 'wb') as f:
         f.write(img_string)
     start = time.time()
-    _, result, angle = handle_ocr(image_path=path)
+    result = handle_ocr(image_path=path)
     res = map(lambda x: {'w': x['w'], 'h': x['h'], 'cx': x['cx'], 'cy': x['cy'], 'degree': x['degree'], 'text': x['text']}, result)
     res = list(res)
     time_take = time.time() - start

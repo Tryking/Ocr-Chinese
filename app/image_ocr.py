@@ -59,3 +59,4 @@ def handle_ocr(image_path):
                                                                        text_model='opencv_dnn_detect'
                                                                        ),
                                    left_adjust=True, right_adjust=True, alph=0.1)
+    return result
