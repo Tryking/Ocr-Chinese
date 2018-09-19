@@ -1,10 +1,12 @@
 import base64
+import json
+import time
 import uuid
 
 from flask import request, render_template
 
 from app import app
-from app.image_ocr import handle_ocr
+from app.image_ocr import handle_ocr_async, handle_ocr
 from app.libs.common import *
 
 
@@ -22,8 +24,12 @@ def ocr():
     path = '/tmp/{}.png'.format(job_id)
     with open(path, 'wb') as f:
         f.write(img_string)
-    handle_ocr(image_path=path)
-    return 'true'
+    start = time.time()
+    _, result, angle = handle_ocr(image_path=path)
+    res = map(lambda x: {'w': x['w'], 'h': x['h'], 'cx': x['cx'], 'cy': x['cy'], 'degree': x['degree'], 'text': x['text']}, result)
+    res = list(res)
+    time_take = time.time() - start
+    return json.dumps({'res': res, 'timeTake': round(time_take, 4)})
 
 
 @app.route('/ocr_t', methods=['GET'])
@@ -33,5 +39,5 @@ def ocr_t():
     msgid = get_result_param_value(result=result, param='msgid')
     systemtime = get_result_param_value(result=result, param='systemtime')
     localUrl = get_result_param_value(result=result, param='localUrl')
-    handle_ocr(image_path=localUrl)
+    handle_ocr_async(image_path=localUrl)
     return 'true'
