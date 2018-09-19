@@ -21,8 +21,6 @@ def handle_ocr(image_path):
     """
     后台处理OCR
     """
-    time.sleep(2)
-    print(index)
     img = Image.open(image_path).convert("RGB")
     W, H = img.size
     start = time.time()
