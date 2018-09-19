@@ -3,7 +3,7 @@ import json
 import time
 import uuid
 
-from flask import request, render_template
+from flask import request, render_template, Response
 
 from app import app
 from app.image_ocr import handle_ocr_async, handle_ocr
@@ -13,6 +13,12 @@ from app.libs.common import *
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('ocr.html')
+
+
+@app.route("/health")
+def health():
+    result = {'status': 'UP'}
+    return Response(json.dumps(result), mimetype='application/json')
 
 
 @app.route('/ocr', methods=['GET', 'POST'])
