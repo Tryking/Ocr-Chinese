@@ -49,7 +49,7 @@ def letterbox_image(image, size):
 
     resized_image = image.resize((new_w, new_h), Image.BICUBIC)
 
-    boxed_image = Image.new('RGB', size, (128, 128, 128))
+    boxed_image = Image.new(mode='RGB', size=size, color=(128, 128, 128))
     boxed_image.paste(resized_image, ((w - new_w) // 2, (h - new_h) // 2))
     return boxed_image
 
@@ -138,7 +138,8 @@ def crnn_rec(im, boxes, if_im=False, left_adjust=False, right_adjust=False, alph
         # 识别的文本
         sim_pred = crnnOcr(part_img)
         if sim_pred.strip() != u'':
-            results.append({'cx': cx, 'cy': cy, 'text': sim_pred, 'w': newW, 'h': newH, 'degree': degree * 180.0 / np.pi})
+            results.append(
+                {'cx': cx, 'cy': cy, 'text': sim_pred, 'w': newW, 'h': newH, 'degree': degree * 180.0 / np.pi})
 
     return results
 

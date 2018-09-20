@@ -1,14 +1,11 @@
 """
 
 """
-import os
-from .config import DARKNET_ROOT, YOLO_CFG, YOLO_WEIGHTS, YOLO_DATA
+from .config import YOLO_CFG, YOLO_WEIGHTS, YOLO_DATA
 
-os.chdir(DARKNET_ROOT)
-import darknet as dn
-import pdb
+import app.darknet.python.darknet as dn
 
-# dn.set_gpu(0)
+dn.set_gpu(0, 1, 2, 3)
 net = dn.load_net(YOLO_CFG.encode('utf-8'), YOLO_WEIGHTS.encode('utf-8'), 0)
 meta = dn.load_meta(YOLO_DATA.encode('utf-8'))
 
