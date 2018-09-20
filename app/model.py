@@ -1,5 +1,5 @@
 """
-??
+模型
 """
 import numpy as np
 from PIL import Image
@@ -12,14 +12,14 @@ from app.detector.other import get_boxes
 
 def model(img, detect_angle=False, config=None, if_im=True, left_adjust=False, right_adjust=False, alph=0.1):
     """
-    :param img:
-    :param detect_angle: ????????
-    :param config:
-    :param if_im:
-    :param left_adjust:
-    :param right_adjust:
-    :param alph:
-    :return:
+    :param img: 
+    :param detect_angle: 是否检测文字朝向
+    :param config: 
+    :param if_im: 
+    :param left_adjust: 
+    :param right_adjust: 
+    :param alph: 
+    :return: 
     """
     if config is None:
         config = {}
@@ -100,7 +100,7 @@ def text_detect(img, MAX_HORIZONTAL_GAP=30,
 
 def sort_box(box):
     """
-        ?box??,???????
+        对box排序,及页面进行排版
         box[index, 0] = x1
         box[index, 1] = y1
         box[index, 2] = x2
@@ -117,11 +117,11 @@ def sort_box(box):
 
 def crnn_rec(im, boxes, if_im=False, left_adjust=False, right_adjust=False, alph=0.2):
     """
-    crnn???ocr??
+    crnn模型，ocr识别
 
     :param im:
     :param boxes:
-    :param if_im:  ??????
+    :param if_im:  是否返回图像
     :param left_adjust:
     :param right_adjust:
     :param alph:
@@ -135,18 +135,17 @@ def crnn_rec(im, boxes, if_im=False, left_adjust=False, right_adjust=False, alph
         partImg, newW, newH = rotate_cut_img(im, degree, box, w, h, left_adjust, right_adjust, alph)
         new_box = xy_rotate_box(cx, cy, newW, newH, degree)
         part_img = partImg.convert('L')
-        # ?????
+        # 识别的文本
         sim_pred = crnnOcr(part_img)
         if sim_pred.strip() != u'':
-            results.append(
-                {'cx': cx, 'cy': cy, 'text': sim_pred, 'w': newW, 'h': newH, 'degree': degree * 180.0 / np.pi})
+            results.append({'cx': cx, 'cy': cy, 'text': sim_pred, 'w': newW, 'h': newH, 'degree': degree * 180.0 / np.pi})
 
     return results
 
 
 def solve(box):
     """
-        ? cx,cy? w,h ?? angle ???
+        绕 cx,cy点 w,h 旋转 angle 的坐标
         x = cx-w/2
         y = cy-h/2
         x1-cx = -w/2*cos(angle) +h/2*sin(angle)
@@ -192,7 +191,7 @@ def rotate_cut_img(im, degree, box, w, h, leftAdjust=False, rightAdjust=False, a
 
 def xy_rotate_box(cx, cy, w, h, angle):
     """
-        ? cx,cy? w,h ?? angle ???
+        绕 cx,cy点 w,h 旋转 angle 的坐标
         x_new = (x-cx)*cos(angle) - (y-cy)*sin(angle)+cx
         y_new = (x-cx)*sin(angle) + (y-cy)*sin(angle)+cy
     """
