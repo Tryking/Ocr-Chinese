@@ -6,7 +6,7 @@ import uuid
 from flask import request, render_template, Response
 
 from app import app
-from app.image_ocr import handle_ocr_async, handle_ocr
+from app.image_ocr import handle_ocr_async, handle_ocr, handle_ocr_async_test
 from app.libs.common import *
 
 
@@ -32,18 +32,25 @@ def ocr():
         f.write(img_string)
     start = time.time()
     result = handle_ocr(image_path=path)
-    res = map(lambda x: {'w': x['w'], 'h': x['h'], 'cx': x['cx'], 'cy': x['cy'], 'degree': x['degree'], 'text': x['text']}, result)
+    res = map(
+        lambda x: {'w': x['w'], 'h': x['h'], 'cx': x['cx'], 'cy': x['cy'], 'degree': x['degree'], 'text': x['text']},
+        result)
     res = list(res)
     time_take = time.time() - start
     return json.dumps({'res': res, 'timeTake': round(time_take, 4)})
 
 
-@app.route('/ocr_t', methods=['GET'])
+@app.route('/ocr_t', methods=['POST'])
 def ocr_t():
-    result = request.form.to_dict()
+    result = request.get_data(as_text=True)
+    result = json.loads(result)
     version = get_result_param_value(result=result, param='version')
     msgid = get_result_param_value(result=result, param='msgid')
     systemtime = get_result_param_value(result=result, param='systemtime')
     localUrl = get_result_param_value(result=result, param='localUrl')
-    handle_ocr_async(image_path=localUrl)
-    return 'true'
+    if not version or not msgid or not systemtime or not localUrl:
+        result = {'resultCode': '300', 'resultDesc': 'Params Error'}
+        return Response(json.dumps(result), mimetype='application/json')
+    handle_ocr_async_test(image_path=localUrl, msgid=msgid)
+    result = {'resultCode': '200', 'resultDesc': 'Success'}
+    return Response(json.dumps(result), mimetype='application/json')

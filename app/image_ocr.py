@@ -1,9 +1,12 @@
+import json
 import time
 from threading import Thread
 
+import requests
 from PIL import Image
 
 from app import model
+from app.libs.common import get_now
 
 index = 0
 
@@ -39,6 +42,19 @@ def handle_ocr_async(image_path):
                                    left_adjust=True, right_adjust=True, alph=0.1)
 
 
+@async
+def handle_ocr_async_test(image_path, msgid):
+    """
+    后台处理OCR
+    """
+    # img = Image.open(image_path).convert("RGB")
+    time.sleep(1)
+    systemtime = get_now()
+    check_result = ['test0', 'test1', 'test2']
+    data = {'version': '1.0', 'msgid': msgid, 'systemtime': systemtime, 'type': '103', 'checkResult': check_result}
+    requests.post(url='http://www.baidu.com', data=json.dumps(data))
+
+
 def handle_ocr(image_path):
     """
     后台处理OCR
@@ -63,4 +79,3 @@ def handle_ocr(image_path):
         return result
     except Exception as e:
         print(str(e))
-
