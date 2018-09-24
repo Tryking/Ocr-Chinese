@@ -2,7 +2,7 @@ from app.config import YOLO_CFG, YOLO_WEIGHTS
 import numpy as np
 import cv2
 
-net = cv2.dnn.readNetFromDarknet(YOLO_CFG, YOLO_WEIGHTS)
+net = cv2.dnn.readNetFromDarknet(cfgFile=YOLO_CFG, darknetModel=YOLO_WEIGHTS)
 
 
 def text_detect(img):
