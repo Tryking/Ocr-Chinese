@@ -37,10 +37,10 @@ def handle_ocr_async(image_path, msgid):
         app.logger.debug('send: %s', json.dumps(data))
         response = requests.post(url=CALLBACK_URL, headers=headers, data=json.dumps(data), timeout=5)
         cost = round(time.time() - start, ndigits=2)
-        app.logger.debug('status code: %s , cost: %s', str(response.status_code), str(cost))
+        app.logger.debug('status code: %s , cost: %s s', str(response.status_code), str(cost))
         app.logger.debug('response: %s', str(response.content, encoding='utf-8'))
     except Exception as e:
-        app.logger.error('message info is %s', str(e), exc_info=True)
+        app.logger.error('message info is : %s', str(e), exc_info=True)
 
 
 def handle_ocr(image_path):
@@ -61,9 +61,8 @@ def handle_ocr(image_path):
                                                                            LINE_MIN_SCORE=0.2,
                                                                            TEXT_PROPOSALS_WIDTH=5,
                                                                            MIN_NUM_PROPOSALS=0,
-                                                                           text_model='darknet_detect'
-                                                                           ),
+                                                                           text_model='darknet_detect'),
                                        left_adjust=True, right_adjust=True, alph=0.1)
         return result
     except Exception as e:
-        app.logger.error('message info is %s', str(e), exc_info=True)
+        app.logger.error('message info is : %s', str(e), exc_info=True)
