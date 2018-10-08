@@ -37,6 +37,7 @@ def ocr():
         result)
     res = list(res)
     time_take = time.time() - start
+    app.logger.debug('image: %s , cost: %s', path, round(time_take, 4))
     return json.dumps({'res': res, 'timeTake': round(time_take, 4)})
 
 
