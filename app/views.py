@@ -9,9 +9,6 @@ from app import app
 from app.image_ocr import handle_ocr_async, handle_ocr
 from app.libs.common import *
 
-init_log(logging.DEBUG, logging.DEBUG, "logs/" + str(os.path.split(__file__)[1].split(".")[0]) + ".log")
-init_log(logging.ERROR, logging.ERROR, "logs/" + str(os.path.split(__file__)[1].split(".")[0]) + "_error.log")
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -47,7 +44,7 @@ def ocr():
 def pic_ocr_detection():
     try:
         result = request.get_data(as_text=True)
-        debug('receive:|' + str(result))
+        app.logger.debug('receive:| %s', str(result))
         result = json.loads(result)
         version = get_result_param_value(result=result, param='version')
         msg_id = get_result_param_value(result=result, param='msgid')
@@ -60,6 +57,6 @@ def pic_ocr_detection():
         result = {'resultCode': '200', 'resultDesc': 'Success'}
         return Response(json.dumps(result), mimetype='application/json')
     except Exception as e:
-        error(str(e))
+        app.logger.error('message info is %s', str(e), exc_info=True)
         result = {'resultCode': '300', 'resultDesc': 'Params Error'}
         return Response(json.dumps(result), mimetype='application/json')

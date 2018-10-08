@@ -5,9 +5,9 @@ from threading import Thread
 import requests
 from PIL import Image
 
-from app import model
+from app import model, app
 from app.config import CALLBACK_URL
-from app.libs.common import get_now, error, debug
+from app.libs.common import get_now
 
 index = 0
 
@@ -34,13 +34,13 @@ def handle_ocr_async(image_path, msgid):
         res = '\n'.join(res)
         data = {'version': '1.0', 'msgid': msgid, 'systemtime': get_now(), 'type': '103', 'checkResult': res}
         headers = {'Content-Type': 'application/json'}
-        debug('send:' + json.dumps(data))
+        app.logger.debug('send: %s', json.dumps(data))
         response = requests.post(url=CALLBACK_URL, headers=headers, data=json.dumps(data), timeout=5)
         cost = round(time.time() - start, ndigits=2)
-        debug('status code:' + str(response.status_code) + ' cost:' + str(cost))
-        debug(str(response.content, encoding='utf-8'))
+        app.logger.debug('status code: %s , cost: %s', str(response.status_code), str(cost))
+        app.logger.debug('response: %s', str(response.content, encoding='utf-8'))
     except Exception as e:
-        error(str(e))
+        app.logger.error('message info is %s', str(e), exc_info=True)
 
 
 def handle_ocr(image_path):
@@ -66,4 +66,4 @@ def handle_ocr(image_path):
                                        left_adjust=True, right_adjust=True, alph=0.1)
         return result
     except Exception as e:
-        print(str(e))
+        app.logger.error('message info is %s', str(e), exc_info=True)
