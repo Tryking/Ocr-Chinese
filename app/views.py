@@ -6,7 +6,7 @@ import uuid
 from flask import request, render_template, Response
 
 from app import app
-from app.image_ocr import handle_ocr_async, handle_ocr, handle_ocr_async_test
+from app.image_ocr import handle_ocr_async, handle_ocr
 from app.libs.common import *
 
 
@@ -40,17 +40,23 @@ def ocr():
     return json.dumps({'res': res, 'timeTake': round(time_take, 4)})
 
 
-@app.route('/ocr_t', methods=['POST'])
-def ocr_t():
-    result = request.get_data(as_text=True)
-    result = json.loads(result)
-    version = get_result_param_value(result=result, param='version')
-    msgid = get_result_param_value(result=result, param='msgid')
-    systemtime = get_result_param_value(result=result, param='systemtime')
-    localUrl = get_result_param_value(result=result, param='localUrl')
-    if not version or not msgid or not systemtime or not localUrl:
+@app.route('/pic_ocr_detection', methods=['POST'])
+def pic_ocr_detection():
+    try:
+        result = request.get_data(as_text=True)
+        debug('receive:|' + str(result))
+        result = json.loads(result)
+        version = get_result_param_value(result=result, param='version')
+        msg_id = get_result_param_value(result=result, param='msgid')
+        system_time = get_result_param_value(result=result, param='systemtime')
+        local_url = get_result_param_value(result=result, param='localUrl')
+        if not version or not msg_id or not system_time or not local_url:
+            result = {'resultCode': '300', 'resultDesc': 'Params Error'}
+            return Response(json.dumps(result), mimetype='application/json')
+        handle_ocr_async(image_path=local_url, msgid=msg_id)
+        result = {'resultCode': '200', 'resultDesc': 'Success'}
+        return Response(json.dumps(result), mimetype='application/json')
+    except Exception as e:
+        error(str(e))
         result = {'resultCode': '300', 'resultDesc': 'Params Error'}
         return Response(json.dumps(result), mimetype='application/json')
-    handle_ocr_async_test(image_path=localUrl, msgid=msgid)
-    result = {'resultCode': '200', 'resultDesc': 'Success'}
-    return Response(json.dumps(result), mimetype='application/json')

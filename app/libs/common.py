@@ -2,6 +2,8 @@
 通用工具类
 """
 import datetime
+import logging
+import os
 import time
 
 
@@ -26,3 +28,25 @@ def get_now():
     time_stamp = "%s%.3s" % (date_head, date_m_secs)
 
     return time_stamp
+
+
+def write_file_log(msg, module='', level='error'):
+    filename = os.path.split(__file__)[1]
+    if level == 'debug':
+        logging.getLogger().debug('File:' + filename + ', ' + module + ': ' + msg)
+    elif level == 'warning':
+        logging.getLogger().warning('File:' + filename + ', ' + module + ': ' + msg)
+    else:
+        logging.getLogger().error('File:' + filename + ', ' + module + ': ' + msg)
+
+
+# debug
+def debug(msg, func_name=''):
+    module = "%s" % func_name
+    write_file_log(msg, module, 'debug')
+
+
+# error
+def error(msg, func_time=''):
+    module = "%s" % func_time
+    write_file_log(msg, module, 'error')

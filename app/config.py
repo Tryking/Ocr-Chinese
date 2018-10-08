@@ -9,3 +9,5 @@ YOLO_DATA = os.path.join(pwd, "models", "text.data")
 OCR_MODEL = os.path.join(pwd, "models", "ocr.pth")
 
 GPU = True
+
+CALLBACK_URL = 'http://10.148.94.79:7001/ai_httpproxy/authentication/checkResultReturn'
