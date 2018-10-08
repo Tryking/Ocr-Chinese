@@ -5,6 +5,20 @@ import datetime
 import logging
 import os
 import time
+from logging import handlers
+
+
+def init_log(console_level, file_level, logfile):
+    formatter = logging.Formatter('%(name)-12s %(asctime)s %(levelname)-8s %(message)s')
+    logging.getLogger().setLevel(0)
+    console_log = logging.StreamHandler()
+    console_log.setLevel(console_level)
+    console_log.setFormatter(formatter)
+    file_log = handlers.RotatingFileHandler(logfile, maxBytes=1024 * 1024, backupCount=5)
+    file_log.setLevel(file_level)
+    file_log.setFormatter(formatter)
+    logging.getLogger().addHandler(file_log)
+    logging.getLogger().addHandler(console_log)
 
 
 def get_result_param_value(param, result):

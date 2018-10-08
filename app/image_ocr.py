@@ -26,6 +26,7 @@ def handle_ocr_async(image_path, msgid):
     后台处理OCR
     """
     try:
+        start = time.time()
         result = handle_ocr(image_path=image_path)
         res = []
         for _ in result:
@@ -35,7 +36,8 @@ def handle_ocr_async(image_path, msgid):
         headers = {'Content-Type': 'application/json'}
         debug('send:' + json.dumps(data))
         response = requests.post(url=CALLBACK_URL, headers=headers, data=json.dumps(data), timeout=5)
-        debug(str(response.status_code))
+        cost = round(time.time() - start, ndigits=2)
+        debug('status code:' + str(response.status_code) + ' cost:' + str(cost))
         debug(str(response.content, encoding='utf-8'))
     except Exception as e:
         error(str(e))
