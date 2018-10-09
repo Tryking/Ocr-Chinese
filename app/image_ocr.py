@@ -61,7 +61,7 @@ def handle_ocr(image_path):
                                                                            LINE_MIN_SCORE=0.2,
                                                                            TEXT_PROPOSALS_WIDTH=5,
                                                                            MIN_NUM_PROPOSALS=0,
-                                                                           text_model='darknet_detect'),
+                                                                           text_model='opencv_dnn_detect'),
                                        left_adjust=True, right_adjust=True, alph=0.1)
         return result
     except Exception as e:

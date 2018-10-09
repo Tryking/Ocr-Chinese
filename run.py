@@ -18,4 +18,4 @@ error_handler.setLevel(logging.ERROR)
 error_handler.setFormatter(logging_format)
 app.logger.addHandler(error_handler)
 
-app.run(host='0.0.0.0', port=50000, debug=True)
+app.run(host='0.0.0.0', port=50000, threaded=True, debug=True)

@@ -44,8 +44,13 @@ import time
 
 t = time.time()
 
-print (t)                       #Ô­Ê¼Ê±¼äÊý¾Ý
-print (int(t))                  #Ãë¼¶Ê±¼ä´Á
-print (int(round(t * 1000)))    #ºÁÃë¼¶Ê±¼ä´Á
+print(t)  # Ô­Ê¼Ê±¼äÊý¾Ý
+print(int(t))  # Ãë¼¶Ê±¼ä´Á
+print(int(round(t * 1000)))  # ºÁÃë¼¶Ê±¼ä´Á
 
-print (datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+print(datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+
+from concurrent.futures import ThreadPoolExecutor
+
+executor = ThreadPoolExecutor(2)
+# executor.submit(handle_ocr_async(image_path=local_url, msgid=msg_id))
