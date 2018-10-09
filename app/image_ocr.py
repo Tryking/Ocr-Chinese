@@ -6,7 +6,7 @@ import requests
 from PIL import Image
 
 from app import model, app
-from app.config import CALLBACK_URL
+from app.config import CALLBACK_URL, TEXT_MODEL
 from app.libs.common import get_now
 
 index = 0
@@ -49,8 +49,6 @@ def handle_ocr(image_path):
     """
     try:
         img = Image.open(image_path).convert("RGB")
-        W, H = img.size
-        start = time.time()
         _, result, angle = model.model(img, detect_angle=True, config=dict(MAX_HORIZONTAL_GAP=200,
                                                                            MIN_V_OVERLAPS=0.6,
                                                                            MIN_SIZE_SIM=0.6,
@@ -61,7 +59,7 @@ def handle_ocr(image_path):
                                                                            LINE_MIN_SCORE=0.2,
                                                                            TEXT_PROPOSALS_WIDTH=5,
                                                                            MIN_NUM_PROPOSALS=0,
-                                                                           text_model='opencv_dnn_detect'),
+                                                                           text_model=TEXT_MODEL),
                                        left_adjust=True, right_adjust=True, alph=0.1)
         return result
     except Exception as e:

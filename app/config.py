@@ -10,4 +10,7 @@ OCR_MODEL = os.path.join(pwd, "models", "ocr.pth")
 
 GPU = True
 
+# 文字检测方式：opencv_dnn_detect / darknet_detect
+TEXT_MODEL = 'opencv_dnn_detect'
+
 CALLBACK_URL = 'http://10.148.94.79:7001/ai_httpproxy/authentication/checkResultReturn'

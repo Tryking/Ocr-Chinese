@@ -8,7 +8,7 @@ net = cv2.dnn.readNetFromDarknet(cfgFile=YOLO_CFG, darknetModel=YOLO_WEIGHTS)
 def text_detect(img):
     thresh = 0.1
     h, w = img.shape[:2]
-    input_blob = cv2.dnn.blobFromImage(img, scalefactor=0.00390625, size=(608, 608), swapRB=True, crop=False);
+    input_blob = cv2.dnn.blobFromImage(img, scalefactor=0.00390625, size=(608, 608), swapRB=True, crop=False)
     net.setInput(input_blob)
     pred = net.forward()
     cx = pred[:, 0] * w
